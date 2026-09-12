@@ -642,6 +642,10 @@ CFLAGS_GCOV	:= -fprofile-arcs -ftest-coverage -fno-tree-loop-im $(call cc-disabl
 CFLAGS_KCOV	:= $(call cc-option,-fsanitize-coverage=trace-pc,)
 export CFLAGS_GCOV CFLAGS_KCOV
 
+#+bug 496915,zhaosidong＠wingtech.com,modify,20191106, add charging control with ATO
+KBUILD_CFLAGS += $(MTK_CDEFS)
+#-bug 496915,zhaosidong＠wingtech.com,modify,20191106, add charging control with ATO
+
 # Make toolchain changes before including arch/$(SRCARCH)/Makefile to ensure
 # ar/cc/ld-* macros return correct values.
 ifdef CONFIG_LTO_CLANG
