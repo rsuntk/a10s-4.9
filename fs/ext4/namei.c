@@ -2730,8 +2730,7 @@ bool ext4_empty_dir(struct inode *inode)
 		return true;
 
 	de = (struct ext4_dir_entry_2 *) bh->b_data;
-	if (ext4_check_dir_entry(inode, NULL, de, bh, bh->b_data, bh->b_size, 0,
-				 0) ||
+	if (ext4_check_dir_entry(inode, NULL, de, bh, bh->b_data, bh->b_size, 0) ||
 	    le32_to_cpu(de->inode) != inode->i_ino || strcmp(".", de->name)) {
 		print_bh(sb, bh, 0, EXT4_BLOCK_SIZE(sb));
 		ext4_warning_inode(inode, "directory missing '.'");
@@ -2740,8 +2739,7 @@ bool ext4_empty_dir(struct inode *inode)
 	}
 	offset = ext4_rec_len_from_disk(de->rec_len, sb->s_blocksize);
 	de = ext4_next_entry(de, sb->s_blocksize);
-	if (ext4_check_dir_entry(inode, NULL, de, bh, bh->b_data, bh->b_size, 0,
-				 offset) ||
+	if (ext4_check_dir_entry(inode, NULL, de, bh, bh->b_data, bh->b_size, 0) ||
 	    le32_to_cpu(de->inode) == 0 || strcmp("..", de->name)) {
 		print_bh(sb, bh, 0, EXT4_BLOCK_SIZE(sb));
 		ext4_warning_inode(inode, "directory missing '..'");
