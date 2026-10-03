@@ -678,8 +678,7 @@ void register_set_auto_comm_buf(void (*func)(int type, const char *buf, size_t s
 static size_t hook_size;
 static char hook_text[LOG_LINE_MAX + PREFIX_MAX];
 static void (*log_text_hook)(const char *buf, size_t size);
-static size_t msg_print_text(const struct printk_log *msg, enum log_flags prev,
-			     bool syslog, char *buf, size_t size);
+static size_t msg_print_text(const struct printk_log *msg, bool syslog, char *buf, size_t size);
 
 void register_log_text_hook(void (*func)(const char *buf, size_t size))
 {
@@ -699,8 +698,7 @@ void register_log_text_hook(void (*func)(const char *buf, size_t size))
 		step_idx = log_first_idx;
 		for (step_seq = start; step_seq < end; step_seq++) {
 			msg = (struct printk_log *)(log_buf + step_idx);
-			hook_size = msg_print_text(msg, msg->flags,
-					true, hook_text, LOG_LINE_MAX + PREFIX_MAX);
+			hook_size = msg_print_text(msg, true, hook_text, LOG_LINE_MAX + PREFIX_MAX);
 			func(hook_text, hook_size);
 			step_idx = log_next(step_idx);
 		}
@@ -845,8 +843,7 @@ static int log_store(int facility, int level,
 
 #ifdef CONFIG_SEC_EXT
 	if (log_text_hook) {
-		hook_size = msg_print_text(msg, msg->flags,
-				true, hook_text, LOG_LINE_MAX + PREFIX_MAX);
+		hook_size = msg_print_text(msg, true, hook_text, LOG_LINE_MAX + PREFIX_MAX);
 		log_text_hook(hook_text, hook_size);
 #ifdef CONFIG_SEC_DEBUG_AUTO_COMMENT
 		if (msg->for_auto_comment && func_hook_auto_comm)
@@ -2472,7 +2469,6 @@ static int parse_log_file(void)
 	u64 log_seq = start_seq;
 	size_t count = 0;
 	struct printk_log *msg;
-	enum log_flags prev = 0;
 
 	if (log_much == NULL)
 		return -ENOMEM;
@@ -2481,8 +2477,7 @@ static int parse_log_file(void)
 	memset(buff, 0, sizeof(buff));
 	while (log_seq < log_next_seq) {
 		msg = log_from_idx(log_index);
-		count = msg_print_text(msg, prev, true, buff, sizeof(buff));
-		prev = msg->flags;
+		count = msg_print_text(msg, true, buff, sizeof(buff));
 
 		if (log_count + count > log_buf_len + LOG_MUCH_PLUS_LEN)
 			break;
