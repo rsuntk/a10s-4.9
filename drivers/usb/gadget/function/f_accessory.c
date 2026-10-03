@@ -825,13 +825,18 @@ static long acc_ioctl(struct file *fp, unsigned code, unsigned long value)
 
 static int acc_open(struct inode *ip, struct file *fp)
 {
-	if (atomic_xchg(&_acc_dev->open_excl, 1)) {
-		printk(KERN_INFO "usb: acc_open_EBUSY\n");
+	struct acc_dev *dev = get_acc_dev();
+
+	if (!dev)
+		return -ENODEV;
+
+	if (atomic_xchg(&dev->open_excl, 1)) {
+		put_acc_dev(dev);
 		return -EBUSY;
 	}
-	printk(KERN_INFO "usb: acc_open\n");
-	_acc_dev->disconnected = 0;
-	fp->private_data = _acc_dev;
+
+	dev->disconnected = 0;
+	fp->private_data = dev;
 	return 0;
 }
 
