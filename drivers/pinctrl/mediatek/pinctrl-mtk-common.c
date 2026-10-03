@@ -2769,4 +2769,3 @@ pctrl_error:
 	pr_err("mtk_pctrl_init--->Failed\n");
 	return ret;
 }
-
