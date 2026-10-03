@@ -118,3 +118,8 @@ all.config
 
 # fetched Android config fragments
 kernel/configs/android-*.cfg
+
+# Build dir
+build.sh
+/out/
+/AnyKernel3/
