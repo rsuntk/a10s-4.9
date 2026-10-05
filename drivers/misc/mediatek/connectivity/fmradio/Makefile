@@ -14,12 +14,6 @@
 ###############################################################################
 # Necessary Check
 
-ifeq ($(AUTOCONF_H),)
-    $(error AUTOCONF_H is not defined)
-endif
-
-ccflags-y += -imacros $(AUTOCONF_H)
-
 # Force build fail on modpost warning
 KBUILD_MODPOST_FAIL_ON_WARNINGS := y
 ###############################################################################
@@ -60,7 +54,7 @@ ifneq ($(CFG_FM_CHIP_ID),)
 endif
 
     MODULE_NAME := fmradio_drv
-    obj-m += $(MODULE_NAME).o
+    obj-y += $(MODULE_NAME).o
 
     FM_CHIP_MACRO := $(subst ",,$(CONFIG_MTK_FM_CHIP))
     FM_CHIP := $(subst _FM,,$(subst MT,mt,$(subst ",,$(CONFIG_MTK_FM_CHIP))))
