@@ -36,7 +36,7 @@ ccflags-y += -I$(src)/connsys/connac_2_0
 # Objects List
 # ---------------------------------------------------
 MODULE_NAME := bt_drv
-obj-m += $(MODULE_NAME).o
+obj-y += $(MODULE_NAME).o
 
 CORE_DIR  := core
 CHIP_DIR  := chips
